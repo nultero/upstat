@@ -1,26 +1,34 @@
+/*
+|||||
+
+ Superseded by the Rust variant
+ in /src/bin
+
+|||||
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 
-static const char ENG_NOW[] = "/sys/class/power_supply/BAT0/energy_now";
-static const char ENG_FUL[] = "/sys/class/power_supply/BAT0/energy_full";
+const char ENG_NOW[] = "/sys/class/power_supply/BAT0/energy_now";
+const char ENG_FUL[] = "/sys/class/power_supply/BAT0/energy_full";
 
-static const double THRESHOLDS[] = { 88.0, 70.0, 50.0, 24.0, 0.0 };
-static const char   UCHARS[]     = { '\x80', '\x81', '\x82', '\x83', '\x84' }; // battery unicode chars
-static const double MAX          = 0.999;
+const double THRESHOLDS[] = { 88.0, 70.0, 50.0, 24.0, 0.0 };
+const char   UCHARS[]     = { '\x80', '\x81', '\x82', '\x83', '\x84' }; // battery unicode chars
+const double MAX          = 0.99;
 
 int main() {
     char buf[20];
-    double enow;
-    double eful;
+    
     FILE *f = fopen(ENG_NOW, "r");
     fread(buf, sizeof buf, 1, f);
     fclose(f);
-    enow = atof(buf);
+    double enow = atof(buf);
 
     f = fopen(ENG_FUL, "r");
     fread(buf, sizeof buf, 1, f);
     fclose(f);
-    eful = atof(buf);
+    double eful = atof(buf);
 
     double left = enow / eful;
     if (left > MAX) {
